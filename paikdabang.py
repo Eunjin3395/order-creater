@@ -127,7 +127,7 @@ for i in range(0,9):
   paiksccino[i]+="(베이직)"
 
 icecream=[
-  '노말한 소프트'
+  '노말한 소프트',
   '노말한 소프트(+카라멜)',
   '노말한 소프트(+초콜릿)',
   '달고나크런치',
@@ -212,7 +212,7 @@ class Order:
     while(sum(self.divNum)<self.totalNum):
       index=int(random.choices(list(range(0,12)),[20,10,20,10,5,15,5,10,10,15,5,5])[0]) #음료 카테고리를 랜덤으로 뽑기
       if(self.totalNum>=4):
-        q=random.randint(1,int(self.totalNum*0.6)) #그 카테고리에 지정될 잔 수 랜덤 뽑기(1~총 잔수의 80%)까지 가능
+        q=random.randint(1,int(self.totalNum*0.5)) #그 카테고리에 지정될 잔 수 랜덤 뽑기(1~총 잔수의 80%)까지 가능
       else:
         q=random.randint(1,int(self.totalNum))
       if(sum(self.divNum)+q>self.totalNum): #그 카테고리에 q를 더함으로써 합이 총 잔수를 초과하는 경우
