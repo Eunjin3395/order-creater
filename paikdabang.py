@@ -166,7 +166,24 @@ tea_Iced=[
 for i in range(2,12):
   tea_Iced[i]+="(ICED)"
 
-menu=[coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced]
+dessert=[
+  '고메버터 소금빵',
+  '맛카롱(순우유)',
+  '맛카롱(초코크런치)',
+  '맛카롱(딸기크런치)',
+  '사라다빵',
+  '빽그램핫도그',
+  '크리미슈',
+  '크리미단팥빵',
+  '큰마들렌(오리지널)',
+  '네모머핀(초콜릿)',
+  '긴페스츄리와플',
+  '순삭쿠키(코코아더블초코)',
+  '순삭쿠키(청키초코)',
+  '순삭쿠키(청키화이트초코)'
+]
+
+menu=[coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
 # f=open("메뉴 리스트.hwp","w")
 # for row in menu:
 #   for item in row:
@@ -183,8 +200,8 @@ for n in range(1,201):
   current=0
   order=[]
   while(current<total):
-    # [coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced]
-    cIdx=random.choices(range(0,11),weights=[20,10,20,10,5,15,5,10,10,15,5])
+    # [coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
+    cIdx=random.choices(range(0,11),weights=[20,10,20,10,5,15,5,10,10,15,5,5])
     cIdx=cIdx[0]
     selectedMenu=random.choice(menu[cIdx])
     if(selectedMenu not in order):
