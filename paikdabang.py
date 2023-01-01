@@ -1,4 +1,21 @@
 import random
+import unicodedata
+
+def fill_str_with_space(input_s="", max_size=40, fill_char=" "):
+    """
+    - 길이가 긴 문자는 2칸으로 체크하고, 짧으면 1칸으로 체크함. 
+    - 최대 길이(max_size)는 40이며, input_s의 실제 길이가 이보다 짧으면 
+    남은 문자를 fill_char로 채운다.
+    """
+    l = 0 
+    for c in input_s:
+        if unicodedata.east_asian_width(c) in ['F', 'W']:
+            l+=2
+        else: 
+            l+=1
+    return input_s+fill_char*(max_size-l)
+
+
 coffee_Hot=[
   '앗메리카노',
   '빽\'s 카페라떼',
@@ -10,11 +27,10 @@ coffee_Hot=[
   '달고나원조커피',
   '달고나카페라떼',
   '달고나카라멜라떼',
-  '코코넛카페라떼',
   '더블에스프레소',
   '에스프레소콤프레또'
 ]
-for i in range(0,11):
+for i in range(0,10):
   coffee_Hot[i]+="(HOT)"
 
 coffee_Iced=[
@@ -33,7 +49,6 @@ coffee_Iced=[
   '달고나원조커피',
   '달고나카페라떼',
   '달고나카라멜라떼',
-  '코코넛카페라떼',
   '콜드브루',
   '콜드브루라떼',
   '콜드브루흑당라떼',
@@ -46,7 +61,7 @@ coffee_Iced=[
   '아이스크림바닐라라떼',
   '아이스크림카페모카'
 ]
-for i in range(0,16):
+for i in range(0,15):
   coffee_Iced[i]+="(ICED)"
 
 nonCoffee_Hot=[
@@ -112,6 +127,7 @@ for i in range(0,9):
   paiksccino[i]+="(베이직)"
 
 icecream=[
+  '노말한 소프트'
   '노말한 소프트(+카라멜)',
   '노말한 소프트(+초콜릿)',
   '달고나크런치',
@@ -184,37 +200,94 @@ dessert=[
 ]
 
 menu=[coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
-# f=open("메뉴 리스트.hwp","w")
-# for row in menu:
-#   for item in row:
-#     f.write(item)
+
+class Order:
+  def __init__(self):
+    self.totalNum=int(random.choices(list(range(2,15)),[2,18,18,18,12,8,8,1,1,1,1,1,1])[0]) # 가중치 적용해 총 잔 수 지정
+    # [coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
+    self.divNum=[0]*12 #카테고리별로 지정된 음료 잔수에 대한 리스트
+    self.totalDict={} #'음료': n잔 쌍으로 이루어진 dict, 중복 거름
+
+  def setQuan(self): # setting divNum array -> 총 잔 수를 음료 카테고리별로 랜덤 분배하기 
+    while(sum(self.divNum)<self.totalNum):
+      index=int(random.choices(list(range(0,12)),[20,10,20,10,5,15,5,10,10,15,5,5])[0]) #음료 카테고리를 랜덤으로 뽑기
+      if(self.totalNum>=4):
+        q=random.randint(1,int(self.totalNum*0.6)) #그 카테고리에 지정될 잔 수 랜덤 뽑기(1~총 잔수의 80%)까지 가능
+      else:
+        q=random.randint(1,int(self.totalNum))
+      if(sum(self.divNum)+q>self.totalNum): #그 카테고리에 q를 더함으로써 합이 총 잔수를 초과하는 경우
+        self.divNum[index]+=self.totalNum-sum(self.divNum)
+      else:
+        self.divNum[index]+=q
+
+  def setMenu(self): # setting totalDict -> 음료 카테고리별 수량을 음료 메뉴별로 랜덤 지정하기
+    index=0 # 각 분류의 index
+    for q in self.divNum: #리스트 돌며 각 분류별 메뉴 랜덤 선택 및 잔수 지정
+      if(q>0): # 해당 분류에 할당된 잔 수가 존재할 경우
+        curr=0 # 현재까지 해당 분류에 추가한 잔 수
+        while(curr<q): # 현재까지 추가한 잔 수가 총 잔수보다 작을 때만
+          quanToAdd=random.randint(1,q-curr) # 잔 수 랜덤 지정
+          curr+=quanToAdd # 현재까지 추가한 잔 수 업데이트
+          menuToAdd=random.choice(list(menu[index])) # 잔 수를 추가할 음료메뉴 선정
+          if(menuToAdd in self.totalDict): # 이전에 추가된 적 있는 메뉴가 선정됐을 경우 -> 수량만 더해줌
+            self.totalDict[menuToAdd]+=quanToAdd
+          else: # 처음 추가하는 메뉴인 경우 dict에 값 추가
+            self.totalDict[menuToAdd]=quanToAdd
+      index+=1 # 다음 카테고리로 넘어가기 위한 인덱스 업데이트    
+
+  def print(self,file,i):
+    file.write("Order No.{}".format(i).center(28,'='))
+    print("Order No.{}".format(i).center(32,'='))
+    file.write('\n')
+
+    for item,quan in self.totalDict.items():
+      menuName=fill_str_with_space(item,max_size=24)
+      s='{0}{1:>6}'.format(menuName,quan)
+      print(s)
+      file.write(s)
+      file.write('\n')
+
+
+
+
+orders=200
+
+f=open("빽다방 메뉴 연습 "+str(orders)+"개.hwp","w",encoding='utf-8')
+# f = open(str(orders)+'orders.hwp','w', encoding='utf-8') # 로그 저장할 file open 
+i=0
+while(i<orders):
+  i+=1
+  NewOrder=Order()
+  NewOrder.setQuan()
+  NewOrder.setMenu()
+  NewOrder.print(f,i)  
+  f.write('\n\n\n\n')
+  print('\n')
+print(('File of '+str(orders)+' orders created').center(50,'='))
+
+print(NewOrder.totalDict)
+f.close()
+# for n in range(1,201):
+#   total=random.choices(range(2,11),weights=[10,15,10,10,2,2,2,2,1])
+#   total=total[0]
+#   current=0
+#   order=[]
+#   while(current<total):
+#     # [coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
+#     cIdx=random.choices(range(0,11),weights=[20,10,20,10,5,15,5,10,10,15,5,5])
+#     cIdx=cIdx[0]
+#     selectedMenu=random.choice(menu[cIdx])
+#     if(selectedMenu not in order):
+#       order.append(selectedMenu)
+#       current+=1
+  
+#   f.write("Order No.{}".format(n).center(26,'='))
+#   f.write('\n')
+#   for elem in order:
+#     f.write(elem)
 #     f.write('\n')
 #   f.write('\n')
-
-# f.close()
-
-f=open("빽다방 메뉴 연습_new.hwp","w")
-for n in range(1,201):
-  total=random.choices(range(2,11),weights=[10,15,10,10,2,2,2,2,1])
-  total=total[0]
-  current=0
-  order=[]
-  while(current<total):
-    # [coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
-    cIdx=random.choices(range(0,11),weights=[20,10,20,10,5,15,5,10,10,15,5,5])
-    cIdx=cIdx[0]
-    selectedMenu=random.choice(menu[cIdx])
-    if(selectedMenu not in order):
-      order.append(selectedMenu)
-      current+=1
-  
-  f.write("Order No.{}".format(n).center(26,'='))
-  f.write('\n')
-  for elem in order:
-    f.write(elem)
-    f.write('\n')
-  f.write('\n')
-  f.write("\n")
-  f.write('\n')
+#   f.write("\n")
+#   f.write('\n')
   
 
