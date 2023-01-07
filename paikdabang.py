@@ -16,203 +16,64 @@ def fill_str_with_space(input_s="", max_size=40, fill_char=" "):
     return input_s+fill_char*(max_size-l)
 
 
-coffee_Hot=[
-  '앗메리카노',
-  '빽\'s 카페라떼',
-  '원조커피',
-  '바닐라라떼',
-  '달달연유라떼',
-  '카페모카',
-  '카라멜마끼아또',
-  '달고나원조커피',
-  '달고나카페라떼',
-  '달고나카라멜라떼',
-  '더블에스프레소',
-  '에스프레소콤프레또'
-]
-for i in range(0,10):
-  coffee_Hot[i]+="(HOT)"
+global catNum
 
-coffee_Iced=[
-  '앗메리카노',
-  '빽사이즈 앗메리카노',
-  '빽\'s 카페라떼',
-  '빽사이즈 빽\'s 카페라떼',
-  '원조커피',
-  '빽사이즈 원조커피',
-  '아이스티샷추가',
-  '빽사이즈 아이스티샷추가',
-  '바닐라라떼',
-  '달달연유라떼',
-  '카페모카',
-  '카라멜마끼아또',
-  '달고나원조커피',
-  '달고나카페라떼',
-  '달고나카라멜라떼',
-  '콜드브루',
-  '콜드브루라떼',
-  '콜드브루흑당라떼',
-  '콜드브루연유라떼',
-  '디카페인콜드브루',
-  '디카페인콜드브루라떼',
-  '디카페인콜드브루흑당라떼',
-  '디카페인콜드브루연유라떼',
-  '아이스크림카페라떼',
-  '아이스크림바닐라라떼',
-  '아이스크림카페모카'
-]
-for i in range(0,15):
-  coffee_Iced[i]+="(ICED)"
+# category.txt 읽어오기, 개행문자 제거
+temp=[]
+f=open('./settings/category.txt','r')
+lines=f.readlines()
+for line in lines:
+  line=line.strip()
+  line=line.rstrip('\n')
+  temp.append(line)
+f.close()
 
-nonCoffee_Hot=[
-  '초코라떼',
-  '녹차라떼',
-  '토피넛라떼',
-  '민트초코라떼',
-  '고구마라떼',
-  '꿀밤라떼',
-  '오트라떼'
-]
-for i in range(0,7):
-  nonCoffee_Hot[i]+="(HOT)"
+# category.txt에서 , 기준으로 카테고리 이름과 카테고리 가중치 분리해 리스트에 저장하기
+# catText --> category 이름 string으로 구성된 리스트
+# catWeight --> category별 weight int로 구성된 리스트
 
-nonCoffee_Iced=[
-  '초코라떼',
-  '빽사이즈 초코라떼',
-  '녹차라떼',
-  '토피넛라떼',
-  '민트초코라떼',
-  '고구마라떼',
-  '꿀밤라떼',
-  '오트라떼',
-  '딸기라떼',
-  '미숫가루',
-  '청포도플라워',
-  '아이스미초'
-]
-for i in range(0,8):
-  nonCoffee_Iced[i]+="(ICED)"
+catText=[]
+catWeight=[]
+for elem in temp:
+  name,num=elem.split(',')
+  catText.append(name)
+  catWeight.append(int(num))
 
-juiceAde=[
-  '완전딸기주스',
-  '완전토마토주스',
-  '완전블루베리주스',
-  '완전망고주스',
-  '딸기에이드',
-  '유자에이드',
-  '깔라만시에이드',
-  '청포도에이드',
-  '자몽에이드',
-  '복숭아에이드',
-  '미초에이드',
-  '레모네이드'
-]
+print(catText)
+print(catWeight)
 
-paiksccino=[
-  '딸기바나나빽스치노',
-  '초코바나나빽스치노',
-  '녹차빽스치노',
-  '원조빽스치노',
-  '민트초코빽스치노',
-  '피스타치오빽스치노',
-  '초코빽스치노',
-  '딸기빽스치노',
-  '쿠키크런치빽스치노',
-  '퐁당치노 바닐라',
-  '퐁당치노 미숫가루',
-  '퐁당치노 원조'
-]
-for i in range(0,9):
-  paiksccino.append(paiksccino[i]+"(소프트)")
-  paiksccino[i]+="(베이직)"
+catNum=len(catText)
 
-icecream=[
-  '노말한 소프트',
-  '노말한 소프트(+카라멜)',
-  '노말한 소프트(+초콜릿)',
-  '달고나크런치',
-  '아포가토'
-]
+# txt 읽어와서 menu dictonary 완성하기
+# menu --> 'category' : [[menu list],[weight list]]로 구성된 딕셔너리
+menu={}
+for cat in catText:
+  f=open('./settings/'+cat+'.txt','r')
+  lines=f.readlines()
+  menuText=[]
+  menuWeight=[]
+  for line in lines:
+    line=line.strip()
+    line=line.rstrip('\n')
+    name,num=line.split(',')
+    menuText.append(name)
+    menuWeight.append(int(num))
+  menu[cat]=[menuText,menuWeight]
+  print("================{}===============".format(cat))
+  print(menu[cat])
 
-smoothie=[
-  '고구마스무디',
-  '코코넛커피스무디',
-  '플레인요거트스무디',
-  '딸기요거트스무디',
-  '블루베리요거트스무디',
-  '밀크쉐이크'
-]
-
-blackpearl=[
-  '블랙펄라떼',
-  '블랙펄카페라떼',
-  '블랙펄밀크티'
-]
-
-tea_Hot=[
-  '피치우롱스위티',
-  '우롱티',
-  '밀크티',
-  '레몬티',
-  '유자티',
-  '자몽티',
-  '레몬얼그레이',
-  '오렌지자몽블랙',
-  '페퍼민트',
-  '황금캐모마일',
-  '깔라만시티'
-]
-for i in range(0,10):
-  tea_Hot[i]+="(HOT)"
-
-tea_Iced=[
-  '아이스티',
-  '빽사이즈 아이스티',
-  '피치우롱스위티',
-  '우롱티',
-  '밀크티',
-  '레몬티',
-  '유자티',
-  '자몽티',
-  '레몬얼그레이',
-  '오렌지자몽블랙',
-  '페퍼민트',
-  '황금캐모마일'
-]
-for i in range(2,12):
-  tea_Iced[i]+="(ICED)"
-
-dessert=[
-  '고메버터 소금빵',
-  '맛카롱(순우유)',
-  '맛카롱(초코크런치)',
-  '맛카롱(딸기크런치)',
-  '사라다빵',
-  '빽그램핫도그',
-  '크리미슈',
-  '크리미단팥빵',
-  '큰마들렌(오리지널)',
-  '네모머핀(초콜릿)',
-  '긴페스츄리와플',
-  '순삭쿠키(코코아더블초코)',
-  '순삭쿠키(청키초코)',
-  '순삭쿠키(청키화이트초코)'
-]
-
-menu=[coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
 
 class Order:
   def __init__(self):
     self.totalNum=int(random.choices(list(range(2,15)),[2,18,18,18,12,8,8,1,1,1,1,1,1])[0]) # 가중치 적용해 총 잔 수 지정
-    # [coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
-    self.divNum=[0]*12 #카테고리별로 지정된 음료 잔수에 대한 리스트
+    self.divNum=[0]*catNum #카테고리별로 지정된 음료 잔수에 대한 리스트
     self.totalDict={} #'음료': n잔 쌍으로 이루어진 dict, 중복 거름
 
   def setQuan(self): # setting divNum array -> 총 잔 수를 음료 카테고리별로 랜덤 분배하기 
     while(sum(self.divNum)<self.totalNum):
-      index=int(random.choices(list(range(0,12)),[20,10,20,10,5,15,5,10,10,15,5,5])[0]) #음료 카테고리를 랜덤으로 뽑기
+      index=int(random.choices(list(range(0,12)),catWeight)[0]) #음료 카테고리를 랜덤으로 뽑기
       if(self.totalNum>=4):
-        q=random.randint(1,int(self.totalNum*0.5)) #그 카테고리에 지정될 잔 수 랜덤 뽑기(1~총 잔수의 80%)까지 가능
+        q=random.randint(1,int(self.totalNum*0.5)) #그 카테고리에 지정될 잔 수 랜덤 뽑기(1~총 잔수의 50%)까지 가능
       else:
         q=random.randint(1,int(self.totalNum))
       if(sum(self.divNum)+q>self.totalNum): #그 카테고리에 q를 더함으로써 합이 총 잔수를 초과하는 경우
@@ -228,7 +89,7 @@ class Order:
         while(curr<q): # 현재까지 추가한 잔 수가 총 잔수보다 작을 때만
           quanToAdd=random.randint(1,q-curr) # 잔 수 랜덤 지정
           curr+=quanToAdd # 현재까지 추가한 잔 수 업데이트
-          menuToAdd=random.choice(list(menu[index])) # 잔 수를 추가할 음료메뉴 선정
+          menuToAdd=random.choices(menu[catText[index]][0],menu[catText[index]][1])[0] # 잔 수를 추가할 음료메뉴 선정
           if(menuToAdd in self.totalDict): # 이전에 추가된 적 있는 메뉴가 선정됐을 경우 -> 수량만 더해줌
             self.totalDict[menuToAdd]+=quanToAdd
           else: # 처음 추가하는 메뉴인 경우 dict에 값 추가
@@ -249,10 +110,9 @@ class Order:
 
 
 
-
 orders=200
 
-f=open("빽다방 메뉴 연습 "+str(orders)+"개.hwp","w",encoding='utf-8')
+f=open("빽다방 메뉴 연습 "+str(orders)+"개_겨울ver.hwp","w",encoding='utf-8')
 i=0
 while(i<orders):
   i+=1
