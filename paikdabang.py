@@ -40,9 +40,6 @@ def setCategory(ver):
     name,num=elem.split(',')
     catText.append(name)
     catWeight.append(int(num))
-
-  print(catText)
-  print(catWeight)
   catNum=len(catText)
 
 
@@ -63,8 +60,6 @@ def setMenu(ver):
       menuText.append(name)
       menuWeight.append(int(num))
     menu[cat]=[menuText,menuWeight]
-    print("================{}===============".format(cat))
-    print(menu[cat])
 
 
 class Order:
@@ -129,6 +124,7 @@ elif(version=='2'):
 
 setCategory(version)
 setMenu(version)
+
 f=open("빽다방 메뉴 연습 "+str(orders)+"개_"+version+"_ver.hwp","w",encoding='utf-8')
 i=0
 while(i<orders):
