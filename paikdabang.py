@@ -64,15 +64,15 @@ def setMenu(ver):
 
 class Order:
   def __init__(self):
-    self.totalNum=int(random.choices(list(range(2,15)),[2,18,18,18,12,8,8,1,1,1,1,1,1])[0]) # 가중치 적용해 총 잔 수 지정
+    self.totalNum=int(random.choices(list(range(2,15)),[2,18,18,18,10,8,4,1,1,1,1,1,1])[0]) # 가중치 적용해 총 잔 수 지정
     self.divNum=[0]*catNum #카테고리별로 지정된 음료 잔수에 대한 리스트
     self.totalDict={} #'음료': n잔 쌍으로 이루어진 dict, 중복 거름
 
   def setQuan(self): # setting divNum array -> 총 잔 수를 음료 카테고리별로 랜덤 분배하기 
     while(sum(self.divNum)<self.totalNum):
-      index=int(random.choices(list(range(0,12)),catWeight)[0]) #음료 카테고리를 랜덤으로 뽑기
+      index=int(random.choices(list(range(0,catNum)),catWeight)[0]) #음료 카테고리를 랜덤으로 뽑기
       if(self.totalNum>=4):
-        q=random.randint(1,int(self.totalNum*0.5)) #그 카테고리에 지정될 잔 수 랜덤 뽑기(1~총 잔수의 50%)까지 가능
+        q=random.randint(1,int(self.totalNum*0.6)) #그 카테고리에 지정될 잔 수 랜덤 뽑기(1~총 잔수의 50%)까지 가능
       else:
         q=random.randint(1,int(self.totalNum))
       if(sum(self.divNum)+q>self.totalNum): #그 카테고리에 q를 더함으로써 합이 총 잔수를 초과하는 경우
