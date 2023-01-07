@@ -16,51 +16,55 @@ def fill_str_with_space(input_s="", max_size=40, fill_char=" "):
     return input_s+fill_char*(max_size-l)
 
 
-global catNum
-
-# category.txt 읽어오기, 개행문자 제거
-temp=[]
-f=open('./settings/category.txt','r')
-lines=f.readlines()
-for line in lines:
-  line=line.strip()
-  line=line.rstrip('\n')
-  temp.append(line)
-f.close()
-
-# category.txt에서 , 기준으로 카테고리 이름과 카테고리 가중치 분리해 리스트에 저장하기
+# catText와 catWeight 리스트 생성
 # catText --> category 이름 string으로 구성된 리스트
 # catWeight --> category별 weight int로 구성된 리스트
-
-catText=[]
-catWeight=[]
-for elem in temp:
-  name,num=elem.split(',')
-  catText.append(name)
-  catWeight.append(int(num))
-
-print(catText)
-print(catWeight)
-
-catNum=len(catText)
-
-# txt 읽어와서 menu dictonary 완성하기
-# menu --> 'category' : [[menu list],[weight list]]로 구성된 딕셔너리
-menu={}
-for cat in catText:
-  f=open('./settings/'+cat+'.txt','r')
+def setCategory(ver):
+  global catText
+  global catWeight
+  global catNum
+  # category.txt 읽어오기, 개행문자 제거
+  temp=[]
+  f=open('./settings/'+ver+'/category.txt','r')
   lines=f.readlines()
-  menuText=[]
-  menuWeight=[]
   for line in lines:
     line=line.strip()
     line=line.rstrip('\n')
-    name,num=line.split(',')
-    menuText.append(name)
-    menuWeight.append(int(num))
-  menu[cat]=[menuText,menuWeight]
-  print("================{}===============".format(cat))
-  print(menu[cat])
+    temp.append(line)
+  f.close()
+
+  # category.txt에서 , 기준으로 카테고리 이름과 카테고리 가중치 분리해 리스트에 저장하기
+  catText=[]
+  catWeight=[]
+  for elem in temp:
+    name,num=elem.split(',')
+    catText.append(name)
+    catWeight.append(int(num))
+
+  print(catText)
+  print(catWeight)
+  catNum=len(catText)
+
+
+# txt 읽어와서 menu dictonary 완성하기
+# menu --> 'category' : [[menu list],[weight list]]로 구성된 딕셔너리
+def setMenu(ver):
+  global menu
+  menu={}
+  for cat in catText:
+    f=open('./settings/'+ver+'/'+cat+'.txt','r')
+    lines=f.readlines()
+    menuText=[]
+    menuWeight=[]
+    for line in lines:
+      line=line.strip()
+      line=line.rstrip('\n')
+      name,num=line.split(',')
+      menuText.append(name)
+      menuWeight.append(int(num))
+    menu[cat]=[menuText,menuWeight]
+    print("================{}===============".format(cat))
+    print(menu[cat])
 
 
 class Order:
@@ -109,10 +113,23 @@ class Order:
       file.write('\n')
 
 
+print("Order Creater Started".center(60,'*'))
+orders=int(input("1. 생성하고자 하는 주문 건수를 입력하세요. (MAX:1000)>>"))
+while(orders>1000):
+  orders=int(input("1. 생성하고자 하는 주문 건수를 입력하세요. (MAX:1000)>>"))
 
-orders=200
+version=input("2. 생성하고자 하는 주문의 계절 버전을 입력하세요. (1:여름, 2:겨울) >>")
+while (version!='1' and version!='2'):
+  version=input("2. 생성하고자 하는 주문의 계절 버전을 입력하세요. (1:여름, 2:겨울) >>")
 
-f=open("빽다방 메뉴 연습 "+str(orders)+"개_겨울ver.hwp","w",encoding='utf-8')
+if(version=='1'):
+  version='summer'
+elif(version=='2'):
+  version='winter'
+
+setCategory(version)
+setMenu(version)
+f=open("빽다방 메뉴 연습 "+str(orders)+"개_"+version+"_ver.hwp","w",encoding='utf-8')
 i=0
 while(i<orders):
   i+=1
@@ -122,9 +139,8 @@ while(i<orders):
   NewOrder.print(f,i)  
   f.write('\n\n\n\n')
   print('\n')
-print(('File of '+str(orders)+' orders created').center(50,'='))
+print(('File of '+str(orders)+' orders created').center(60,'*'))
 
-print(NewOrder.totalDict)
 f.close()
 
 

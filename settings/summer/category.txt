@@ -1,0 +1,12 @@
+coffee_Hot,1
+coffee_Iced,7
+nonCoffee_Hot,1
+nonCoffee_Iced,7
+juiceAde,3
+paiksccino,7
+icecream,2
+smoothie,4
+blackpearl,3
+tea_Hot,1
+tea_Iced,3
+dessert,1
