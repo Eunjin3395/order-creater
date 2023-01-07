@@ -253,7 +253,6 @@ class Order:
 orders=200
 
 f=open("빽다방 메뉴 연습 "+str(orders)+"개.hwp","w",encoding='utf-8')
-# f = open(str(orders)+'orders.hwp','w', encoding='utf-8') # 로그 저장할 file open 
 i=0
 while(i<orders):
   i+=1
@@ -267,27 +266,5 @@ print(('File of '+str(orders)+' orders created').center(50,'='))
 
 print(NewOrder.totalDict)
 f.close()
-# for n in range(1,201):
-#   total=random.choices(range(2,11),weights=[10,15,10,10,2,2,2,2,1])
-#   total=total[0]
-#   current=0
-#   order=[]
-#   while(current<total):
-#     # [coffee_Hot,coffee_Iced,nonCoffee_Hot,nonCoffee_Iced,juiceAde,paiksccino,icecream,smoothie,blackpearl,tea_Hot,tea_Iced,dessert]
-#     cIdx=random.choices(range(0,11),weights=[20,10,20,10,5,15,5,10,10,15,5,5])
-#     cIdx=cIdx[0]
-#     selectedMenu=random.choice(menu[cIdx])
-#     if(selectedMenu not in order):
-#       order.append(selectedMenu)
-#       current+=1
-  
-#   f.write("Order No.{}".format(n).center(26,'='))
-#   f.write('\n')
-#   for elem in order:
-#     f.write(elem)
-#     f.write('\n')
-#   f.write('\n')
-#   f.write("\n")
-#   f.write('\n')
-  
+
 
